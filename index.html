@@ -3,12 +3,87 @@
   <p> Cake ordering survey for Andrea Cake </p>
 
 
-  <form>
-    <input /> <br />
+  <form action="mailto:andrea.kondrotova@gmail.com" method="post" enctype="text/plain">
 
-    <button type='submit' value='Send' />
+    <fieldset>
+      <label for='name'>Name </label>
+      <input name='name'></input>
+    </fieldset>
+    
+    <fieldset>
+      <legend>Step One: Select Size</legend>
+      <input type='radio' name='size' value='small' />
+      <label for='small'>Small ~ 8 Servings ~ 8in ~ £30-40 </label><br>
+      <input type='radio' name='size' value='medium' />
+      <label for='medium'>Medium ~ 12 Servings ~ 10in ~ £40-50</label><br>
+      <input type='radio' name='size' value='large' />
+      <label for='large'>Large ~ 16 Servings ~ 12in ~ £50-60+</label><br>
+    </fieldset>
+    
+    <fieldset>
+      <legend>Step Two: Select Flavour</legend>
+      <!-- TODO: <p> Select up to two flavours </p> -->
+      <input type='radio' name='flavour' value='chocolate' />
+      <label for='chocolate'>Chocolate</label><br>
+      <input type='radio' name='flavour' value='vanilla' />
+      <label for='vanilla'>Vanilla</label><br>
+      <input type='radio' name='flavour' value='caramel' />
+      <label for='caramel'>Caramel</label><br>
+      <input type='radio' name='flavour' value='blueberry' />
+      <label for='blueberry'>Blueberry</label><br>
+      <input type='radio' name='flavour' value='strawberry' />
+      <label for='strawberry'>Strawberry</label><br>
+      <input type='radio' name='flavour' value='raspberry' />
+      <label for='raspberry'>Raspberry</label><br>
+      <input type='radio' name='flavour' value='nutella' />
+      <label for='nutella'>Nutella</label><br>
+    </fieldset>
+
+    <fieldset>
+      <legend>Step Three: Select Decorations</legend>
+      <input type='radio' name='decorations' value='fruits' />
+      <label for='fruits'>Fresh Fruits</label><br> 
+      <input type='radio' name='decorations' value='chocolate' />
+      <label for='chocolate'>Fancy Chocolate</label><br>
+      <input type='radio' name='decorations' value='ornaments' />
+      <label for='ornaments'>Cream Ornaments & Flowers</label><br> 
+      <input type='radio' name='decorations' value='custom' />
+      <label for='custom'>By Own Choice (Discuss through Messneger)</label><br> 
+    </fieldset>
+
+    <!-- TODO: Make date field-->
+
+    <fieldset>
+      <legend>Further Comments</legend>
+      <textarea name='comment'> </textarea>
+    </fieldset>
+
+    <button type='submit'>Send</button>
   </form>
-  
 
 </html>
+<script src="https://smtpjs.com/v3/smtp.js">
+</script>
 
+<script>
+  function sendMail() {
+      Email.send({
+        Host : "smtp.yourisp.com",
+        Username : "username",
+        Password : "password",
+        To : 'them@website.com',
+        From : "you@isp.com",
+        Subject : "This is the subject",
+        Body : "And this is the body"
+      }).then(
+          message => alert(message)
+      );
+  }
+  
+
+</script>
+
+<style>
+
+
+</style>
