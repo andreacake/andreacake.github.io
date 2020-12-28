@@ -1,23 +1,61 @@
 <html>
+  <head>
+    <title>Andrea Cake</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0;"/>
+
+  </head>
+
   <h1>Andrea Cake</h1>
-  <p> Cake ordering survey for Andrea Cake </p>
+  <p> Cake ordering for Andrea Cake </p>
 
 
-  <form action="mailto:andrea.kondrotova@gmail.com" method="post" enctype="text/plain">
+  <div id='stepOne'>
+  <form id='cakeForm'>
 
     <fieldset>
-      <label for='name'>Name </label>
-      <input name='name'></input>
+      <legend>Name</legend>
+      <input name='name' id='customerName' placeholder='John Doe'></input>
     </fieldset>
     
     <fieldset>
       <legend>Step One: Select Size</legend>
-      <input type='radio' name='size' value='small' />
-      <label for='small'>Small ~ 8 Servings ~ 8in ~ £30-40 </label><br>
+      <table>
+        <tr>
+          <td>
+            <input type='radio' name='size' value='small' />
+            <label for='small'>Small</label><br>
+          </td>
+          <td>8 Servings</td>
+          <td>8"</td>
+          <td>£30-40</td>
+        </tr>
+        <tr>
+          <td>
+            <input type='radio' name='size' value='medium' />
+            <label for='small'>Medium</label><br>
+          </td>
+          <td>12 Servings</td>
+          <td>10"</td>
+          <td>£40-50</td>
+        </tr>
+        <tr>
+          <td>
+            <input type='radio' name='size' value='large' />
+            <label for='large'>Large</label><br>
+          </td>
+          <td>16 Servings</td>
+          <td>10"</td>
+          <td>£50-60+</td>
+        </tr>
+
+
+      </table>
+      <!--
       <input type='radio' name='size' value='medium' />
       <label for='medium'>Medium ~ 12 Servings ~ 10in ~ £40-50</label><br>
       <input type='radio' name='size' value='large' />
       <label for='large'>Large ~ 16 Servings ~ 12in ~ £50-60+</label><br>
+ -->
     </fieldset>
     
     <fieldset>
@@ -55,11 +93,22 @@
 
     <fieldset>
       <legend>Further Comments</legend>
-      <textarea name='comment'> </textarea>
+      <textarea placeholder="Cake for my son's birthday!" id='specialMessage' name='comment'></textarea>
     </fieldset>
 
-    <button type='submit'>Send</button>
   </form>
+    <button onClick='sendMail()'>Send</button>
+  </div>
+
+  <div id='stepTwo'>
+    <h1>Thank You! 🎉</h1>
+    <p>I will be in touch with you very soon through Messenger!</p>
+    <p>You can contact me through Facebook <a href=''>here</a> or through my e-mail, andrea.kondrotova@gmail.com</p>
+
+
+  </div>
+
+
 
 </html>
 <script src="https://smtpjs.com/v3/smtp.js">
@@ -67,16 +116,54 @@
 
 <script>
   function sendMail() {
+      var subject;
+      var body;
+
+      var name = document.getElementById('customerName').value;
+      if (name == '') {
+          name = 'Customer'
+      }
+
+      subject = 'New Cake Request from ' + name;
+
+      var form = document.getElementById('cakeForm');
+      var size = form.elements['size'].value;
+      var flavour = form.elements['flavour'].value;
+      var decorations = form.elements['decorations'].value;
+
+      var specialMessage = document.getElementById('specialMessage').value;
+      //var specialMessage = form.elements['specialMessage'].value;
+
+      if (specialMessage == '') {
+          specialMessage = 'No Special Message';
+      }
+
+    //var size = document.getElementById('')
+    //var size = document.querySelector('input[name="size"]:checked').value;
+    console.log(size);
+
+
+    body = "<h2> Request from " + name + "</h2> <br>" +
+          "Size: " + size + '<br>' +
+          'Flavour: ' + flavour + '<br>' +
+          'Decorations: ' + decorations + '<br>' +
+          'Special Message: ' + '<br>' + specialMessage + '<br>';
+
       Email.send({
-        Host : "smtp.yourisp.com",
-        Username : "username",
-        Password : "password",
-        To : 'them@website.com',
-        From : "you@isp.com",
-        Subject : "This is the subject",
-        Body : "And this is the body"
+        SecureToken: "030798b5-71ee-47b7-a39d-7b93f0725051",
+        To : 'signet99@protonmail.com',
+        From : "kondrot.m@gmail.com",
+        Subject : subject,
+        Body : body
       }).then(
-          message => alert(message)
+          message => {
+              if (message == 'OK') {
+                  document.getElementById('stepOne').style.display = 'none';
+                  document.getElementById('stepTwo').style.display = 'block';
+              } else {
+              alert(message);
+                     } 
+          }
       );
   }
   
@@ -84,6 +171,20 @@
 </script>
 
 <style>
+  table, th, td {
+      border: 0px solid black;
+      padding: 1px;
+  }
+  table {
+      border-spacing: 0px;
+      width: 100%;
+  }
+  textarea {
+      width: 100%;
+  }
+  #stepTwo {
+      display: none;
+  }
 
 
 </style>
