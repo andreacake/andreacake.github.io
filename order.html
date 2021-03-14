@@ -1,0 +1,238 @@
+<html>
+  <head>
+    <title>Andrea Cake</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  </head>
+
+  <h1 class='heading'>Andrea Cake</h1>
+
+
+  <div id='stepOne'>
+  <p> Cake ordering for Andrea Cake </p>
+  <form onsubmit='sendMail(event)' id='cakeForm'>
+
+    <fieldset>
+      <legend>Name</legend>
+      <input name='name' id='customerName' placeholder='John Doe'></input>
+    </fieldset>
+    
+    <fieldset>
+      <legend>Step One: Select Size</legend>
+      <table>
+        <tr>
+          <td>
+            <input type='radio' name='size' value='Small' />
+            <label for='small'>Small</label><br>
+          </td>
+          <td>8 Servings</td>
+          <td>8"</td>
+          <td>£30-40</td>
+        </tr>
+        <tr>
+          <td>
+            <input type='radio' name='size' value='Medium' />
+            <label for='small'>Medium</label><br>
+          </td>
+          <td>12 Servings</td>
+          <td>10"</td>
+          <td>£40-50</td>
+        </tr>
+        <tr>
+          <td>
+            <input type='radio' name='size' value='Large' />
+            <label for='large'>Large</label><br>
+          </td>
+          <td>16 Servings</td>
+          <td>12"</td>
+          <td>£50-60+</td>
+        </tr>
+
+
+      </table>
+      <!--
+      <input type='radio' name='size' value='medium' />
+      <label for='medium'>Medium ~ 12 Servings ~ 10in ~ £40-50</label><br>
+      <input type='radio' name='size' value='large' />
+      <label for='large'>Large ~ 16 Servings ~ 12in ~ £50-60+</label><br>
+ -->
+    </fieldset>
+    
+    <fieldset>
+      <legend>Step Two: Select Flavours</legend>
+      <!-- TODO: <p> Select up to two flavours </p> -->
+      <table>
+        <tr>
+          <td>
+      <input type='radio' name='flavourOne' value='Chocolate' />
+      <label for='chocolate'>Chocolate</label><br>
+      <input type='radio' name='flavourOne' value='Vanilla' />
+      <label for='vanilla'>Vanilla</label><br>
+      <input type='radio' name='flavourOne' value='Caramel' />
+      <label for='caramel'>Caramel</label><br>
+      <input type='radio' name='flavourOne' value='Blueberry' />
+      <label for='blueberry'>Blueberry</label><br>
+      <input type='radio' name='flavourOne' value='Strawberry' />
+      <label for='strawberry'>Strawberry</label><br>
+      <input type='radio' name='flavourOne' value='Raspberry' />
+      <label for='raspberry'>Raspberry</label><br>
+      <input type='radio' name='flavourOne' value='Nutella' />
+      <label for='nutella'>Nutella</label><br>
+ </td>
+          <td> & </td>
+          <td>
+      <input type='radio' name='flavourTwo' value='Chocolate' />
+      <label for='chocolate'>Chocolate</label><br>
+      <input type='radio' name='flavourTwo' value='Vanilla' />
+      <label for='vanilla'>Vanilla</label><br>
+      <input type='radio' name='flavourTwo' value='Caramel' />
+      <label for='caramel'>Caramel</label><br>
+      <input type='radio' name='flavourTwo' value='Blueberry' />
+      <label for='blueberry'>Blueberry</label><br>
+      <input type='radio' name='flavourTwo' value='Strawberry' />
+      <label for='strawberry'>Strawberry</label><br>
+      <input type='radio' name='flavourTwo' value='Raspberry' />
+      <label for='raspberry'>Raspberry</label><br>
+      <input type='radio' name='flavourTwo' value='Nutella' />
+      <label for='nutella'>Nutella</label><br>
+
+          </td>
+        </tr>
+      </table>
+      
+
+
+    </fieldset>
+
+    <fieldset>
+      <legend>Step Three: Select Decorations</legend>
+      <input type='radio' name='decorations' value='Fresh Fruits' />
+      <label for='fruits'>Fresh Fruits</label><br> 
+      <input type='radio' name='decorations' value='Fancy Chocolate' />
+      <label for='chocolate'>Fancy Chocolate</label><br>
+      <input type='radio' name='decorations' value='Cream Ornaments & Flowers' />
+      <label for='ornaments'>Cream Ornaments & Flowers</label><br> 
+      <input type='radio' name='decorations' value='Custom' />
+      <label for='custom'>By Own Choice (Discuss through Messenger)</label><br> 
+    </fieldset>
+
+    <!-- TODO: Make date field-->
+    <fieldset>
+      <legend>Date [Optional]</legend>
+      <input type='date' name='cakeDate' />
+    </fieldset>
+
+    <fieldset>
+      <legend>Further Comments</legend>
+      <textarea placeholder="e.g. Cake for my son's birthday!" id='specialMessage' name='comment'></textarea>
+    </fieldset>
+
+    <button type='submit' class='submitButton'>Send</button>
+
+  </form>
+  </div>
+
+  <div id='stepTwo'>
+    <h1>Thank You! 🎉</h1>
+    <p>I will be in touch with you very soon through Messenger!</p>
+    <p>You can contact me through Facebook <a href=''>here</a> or through my e-mail, andrea.kondrotova@gmail.com</p>
+
+  </div>
+
+
+
+</html>
+<script src="https://smtpjs.com/v3/smtp.js">
+</script>
+
+<script>
+  function sendMail(e) {
+      e.preventDefault();
+      var subject;
+      var body;
+
+      var name = document.getElementById('customerName').value;
+      if (name == '') {
+          name = 'Customer'
+      }
+
+      subject = 'New Cake Request from ' + name;
+
+      var form = document.getElementById('cakeForm');
+      var size = form.elements['size'].value;
+      var flavourOne = form.elements['flavourOne'].value;
+      var flavourTwo = form.elements['flavourTwo'].value;
+      var decorations = form.elements['decorations'].value;
+      var cakeDate = form.elements['cakeDate'].value;
+
+      var specialMessage = form.elements['specialMessage'].value;
+
+      if (specialMessage == '') {
+          specialMessage = 'No Special Message';
+      }
+
+      body = "<h2> Request from " + name + "</h2> <br>" +
+          'Date for: ' + cakeDate + '<br>' + 
+          "Size: " + size + '<br>' +
+          'First Flavour: ' + flavourOne + '<br>' +
+          'Second Flavour: ' + flavourTwo + '<br>' +
+          'Decorations: ' + decorations + '<br>' +
+          'Special Message: ' + '<br>' + specialMessage + '<br>';
+
+      Email.send({
+        SecureToken: "030798b5-71ee-47b7-a39d-7b93f0725051",
+        To : 'andrea.kondrotova@gmail.com',
+        From : "kondrot.m@gmail.com",
+        Subject : subject,
+        Body : body
+      }).then(
+          message => {
+              if (message == 'OK') {
+                  document.getElementById('stepOne').style.display = 'none';
+                  document.getElementById('stepTwo').style.display = 'block';
+              } else {
+              alert(message);
+                     } 
+          }
+      );
+  }
+  
+
+</script>
+
+<style>
+  table, th, td {
+      border: 0px solid black;
+      padding: 1px;
+  }
+  table {
+      border-spacing: 0px;
+      width: 100%;
+  }
+  textarea {
+      width: 100%;
+  }
+  #stepTwo {
+      display: none;
+  }
+  .heading {
+      text-align: center;
+  }
+  .submitButton {
+      background-color: #F2F3F4;
+      border: solid;
+      width: 98%;
+      display: block;
+      height: 3em;
+      margin-top: .8em;
+      margin-left: auto;
+      margin-right: auto;
+      transition-duration: 0.3s;
+  }
+  .submitButton:hover {
+      background-color: #D7DBDD
+      
+  }
+
+
+</style>
