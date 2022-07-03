@@ -1,4 +1,14 @@
 
+.default {
+  max-width: 1080px;
+  margin: auto;
+}
+
+.navbar-item { 
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
 
 .header {
   padding: 20px;
