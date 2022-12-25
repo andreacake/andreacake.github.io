@@ -7,24 +7,23 @@
 
   <h1 class='heading'><a href="index.html" style="text-decoration: none; color:black">Andrea Cake</a></h1>
 
-
-  <div class="header-small">
-        <img style="
-          width: 100%;
-          height: 20vw;
-          max-height: 150px;
-          overflow: hidden;
-          object-fit: cover;
-          object-position: 50% 42%;
-          border: 2px solid black;
-        " src="header-full.jpg" alt="Love cake">
-  </div>
   <div id='stepOne'>
+  <div class="header-small">
+    <img style="
+      width: 100%;
+      height: 20vw;
+      max-height: 150px;
+      overflow: hidden;
+      object-fit: cover;
+      object-position: 50% 42%;
+      border: 2px solid black;
+    " src="header-full.jpg" alt="Love cake">
+  </div>
   <p> Cake ordering for Andrea Cake </p>
-  <form onsubmit='sendMail(event)' id='cakeForm'>
+  <form onsubmit='nextScreen(event)' id='cakeForm'>
 
     <fieldset>
-      <legend>Name</legend>
+      <legend>Your Name</legend>
       <input name='name' id='customerName' placeholder='John Doe'></input>
     </fieldset>
     
@@ -61,17 +60,10 @@
 
 
       </table>
-      <!--
-      <input type='radio' name='size' value='medium' />
-      <label for='medium'>Medium ~ 12 Servings ~ 10in ~ £40-50</label><br>
-      <input type='radio' name='size' value='large' />
-      <label for='large'>Large ~ 16 Servings ~ 12in ~ £50-60+</label><br>
- -->
-    </fieldset>
+   </fieldset>
     
     <fieldset>
       <legend>Step Two: Select Flavours</legend>
-      <!-- TODO: <p> Select up to two flavours </p> -->
       <table>
         <tr>
           <td>
@@ -110,9 +102,6 @@
           </td>
         </tr>
       </table>
-      
-
-
     </fieldset>
 
     <fieldset>
@@ -130,7 +119,7 @@
     <!-- TODO: Make date field-->
     <fieldset>
       <legend>Date [Optional]</legend>
-      <input type='date' name='cakeDate' />
+      <input type='date' id="dateInput" name='cakeDate' />
     </fieldset>
 
     <fieldset>
@@ -145,8 +134,64 @@
 
   <div id='stepTwo'>
     <h1>Thank You! 🎉</h1>
-    <p>I will be in touch with you very soon through Messenger!</p>
-    <p>You can contact me through Facebook <a href=''>here</a> or through my e-mail, andrea.kondrotova@gmail.com</p>
+    <p>Please take a <b>screenshot</b> of this page and send it through messenger.</p>
+    <p>You can contact me through Facebook <a target="_blank" href='https://www.facebook.com/kondrotcake'>here</a> or through my e-mail, andrea.kondrotova@gmail.com</p>
+
+    <fieldset>
+      <legend>Your Name</legend>
+      <input disabled name='name' id='finalCustomerName' placeholder='John Doe'></input>
+    </fieldset>
+    
+    <fieldset>
+      <legend>Size</legend>
+      <table id="finalTableSize">
+        <tr>
+          <td>
+            <input checked type='radio' name='finalSize' value='Small' />
+            <label id='sizeLabel' for=''></label><br>
+          </td>
+          <td id="finalServings"></td>
+          <td id="finalInches"></td>
+          <td id="finalPrice"></td>
+        </tr>
+     </table>
+    </fieldset>
+
+    <fieldset>
+      <legend id="flavoursLegend">Flavours</legend>
+      <table>
+        <tr id="finalFlavourRow">
+          <td id="finalFlavourOne">
+            <input checked type='radio' name='finalFlavourOne' value='' />
+            <label id="flavourOneLabel" for=''></label><br>
+          </td>
+          <td id="finalFlavourAnd"> & </td>
+          <td id="finalFlavourTwo">
+            <input checked type='radio' name='finalFlavourTwo' value='' />
+            <label id="flavourTwoLabel" for=''></label><br>
+          </td>
+        </tr>
+      </table>
+    </fieldset>
+
+    <fieldset>
+      <legend>Decorations</legend>
+      <input checked type='radio' name='finalDecorations' value='' />
+      <label id='finalDecorations' for=''></label>
+    </fieldset>
+
+    <fieldset id="finalDate">
+      <legend>Date</legend>
+      <input disabled type='date' id="finalDateInput" />
+    </fieldset>
+
+    <fieldset>
+      <legend>Further Comments</legend>
+      <textarea disabled id="finalComment" placeholder="" name='comment'></textarea>
+    </fieldset>
+
+    <!-- <button onclick='prevScreen()' class='submitButton'>Edit</button> -->
+
 
   </div>
 
@@ -157,6 +202,87 @@
 </script>
 
 <script>
+  function nextScreen(e) {
+    e.preventDefault();
+
+    // Parse name
+    let name = document.getElementById('customerName').value;
+
+    document.getElementById('finalCustomerName').value = name
+
+
+    // Parse size
+    sizeLookup = {
+      'Small' : ['Small','8 Servings', '8"', '£40-50'],
+      'Medium' : ['Medium','12 Servings', '10"', '£50-60'],
+      'Large' : ['Large','16 Servings', '12"', '£60+'],
+    }
+
+    let size = document.querySelector('input[name="size"]:checked').value;
+    size = sizeLookup[size];
+    
+    let specialMessage;
+
+    document.getElementById('sizeLabel').innerHTML = size[0]
+    document.getElementById('finalServings').innerHTML = size[1]
+    document.getElementById('finalInches').innerHTML = size[2]
+    document.getElementById('finalPrice').innerHTML = size[3]
+
+
+    // Parse flavours
+    let flavourOne = document.querySelector('input[name="flavourOne"]:checked').value;
+
+    document.getElementById('flavourOneLabel').innerHTML = flavourOne;
+
+    let flavourTwo;
+    let singleFlavour;
+    try {
+      flavourTwo = document.querySelector('input[name="flavourTwo"]:checked').value;
+      document.getElementById('flavourTwoLabel').innerHTML = flavourTwo;
+      singleFlavour = false;
+    } catch (error) {
+      singleFlavour = true;
+      document.getElementById('flavoursLegend').innerHTML = 'Flavour';
+      document.getElementById('finalFlavourRow').removeChild(
+        document.getElementById('finalFlavourAnd')
+      );
+      document.getElementById('finalFlavourRow').removeChild(
+        document.getElementById('finalFlavourTwo')
+      );
+    }
+
+
+    // Parse decorations
+    let decorations = document.querySelector('input[name="decorations"]:checked').value;
+
+    document.getElementById('finalDecorations').innerHTML = decorations;
+
+
+    // Parse date
+    let date = document.getElementById('dateInput').value;
+
+    document.getElementById('finalDateInput').value = date;
+
+    // Parse comment
+    let comment = document.getElementById('specialMessage').value;
+
+    document.getElementById('finalComment').value = comment;
+
+
+
+    // Get value of each selection
+    // Append relevant values to html div
+    // Add flavour text
+    
+
+
+
+    document.getElementById('stepOne').style.display = 'none';
+    document.getElementById('stepTwo').style.display = 'block';
+
+
+  }
+
   function sendMail(e) {
       e.preventDefault();
       var subject;
@@ -232,12 +358,10 @@
   .submitButton {
       background-color: #F2F3F4;
       border: solid;
-      width: 98%;
+      width: 100%;
       display: block;
       height: 3em;
       margin-top: .8em;
-      margin-left: auto;
-      margin-right: auto;
       transition-duration: 0.3s;
   }
   .submitButton:hover {
